@@ -53,6 +53,7 @@ for i in df_group_dict_sort:
 #info outputs: visualizing the data
 
 print("-----------------------")
+print("VISUALIZING THE DATA...")
 
 import plotly
 import plotly.graph_objs as go
@@ -64,7 +65,7 @@ for i in df_group_dict_sort:
     sales_price.append("${:,.2f}".format(i[1]))
 
 fig = go.Figure(go.Bar(
-            x=sales_price.sort(reverse=True),
+            x=sales_price,
             y=products,
             text=sales_price,
             textposition='auto',
@@ -72,11 +73,11 @@ fig = go.Figure(go.Bar(
 
 fig.update_layout(
     title="Top-selling Products (month_year)", #need to customize month
-    xaxis_title="Total Sales",
+    xaxis_title="Sales(USD)",
     yaxis_title="Product Name")
 
 fig.show()
 
 
 
-#print("VISUALIZING THE DATA...")
+
