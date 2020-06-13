@@ -19,47 +19,64 @@ if user_choice not in file_name:
 
 #calculations
 print("-----------------------")
+#month_year = 
 print("MONTH: ","March 2018") #need to figure out how to pull date and year
 
 print("-----------------------")
 print("CRUNCHING THE DATA...")
 
-csv_file_path = user_choice
 
-import pandas as pd
-df = pd.read_csv(csv_file_path)
-df_group = df.groupby(['product']).agg({'sales price': "sum"})
-df_sort = df_group.sort_values(['sales price'],ascending=False)
-df_group_sort_formatted = df_sort.to_string(formatters={'sales price':'${:,.2f}'.format})
-print(df_group_sort_formatted)
-
-#info output_total monthly sales
+#info output: total monthly sales
 
 print("-----------------------")
-df_sum_salesprice = df_group['sales price'].sum()
-print("TOTAL MONTHLY SALES: ", "${:,.2f}".format(round(df_sum_salesprice, 2)))
 
-#print("TOTAL MONTHLY SALES: $12,000.71")
+csv_file_path = user_choice
+import pandas as pd
 
-#import csv
+df = pd.read_csv(csv_file_path)
+df_group = df.groupby(['product'])['sales price'].sum()
+df_group_dict = df_group.to_dict()
+total_monthly_sales = sum(df_group_dict.values())
+print("TOTAL MONTHLY SALES: ", "${:,.2f}".format(total_monthly_sales))
+
+#info output: top selling products
+
+print("-----------------------")
+print("TOP SELLING PRODUCTS:")
+df_group_dict_sort = sorted(df_group_dict.items(), key=lambda x: x[1], reverse=True)
+for i in df_group_dict_sort:
+	print(i[0], "${:,.2f}".format(i[1]))
+
+#df_group_dict_sort = df_group_dict.sort_values(['sales price'],ascending=False)
+#df_group_sort_formatted = df_sort.to_string(formatters={'sales price':'${:,.2f}'.format})
+
+#info outputs: visualizing the data
+
+print("-----------------------")
+
+import plotly
+import plotly.graph_objs as go
+
+products = []
+sales_price = []
+for i in df_group_dict_sort:
+    products.append(i[0])
+    sales_price.append("${:,.2f}".format(i[1]))
+
+fig = go.Figure(go.Bar(
+            x=sales_price.sort(reverse=True),
+            y=products,
+            text=sales_price,
+            textposition='auto',
+            orientation='h'))
+
+fig.update_layout(
+    title="Top-selling Products (month_year)", #need to customize month
+    xaxis_title="Total Sales",
+    yaxis_title="Product Name")
+
+fig.show()
 
 
-#with open(csv_file_path, "r") as csv_file:
-    #reader = csv.DictReader(csv_file)
-    #for row in reader:
-        #price_usd_unit = "(${0:.2f})".format(float(row["unit price"]))
-        #price_usd_sales = "(${0:.2f})".format(float(row["sales price"]))
-        #print(row["product"], price_usd_sales)
 
-
-#print("-----------------------")
-#print("TOTAL MONTHLY SALES: $12,000.71")
-
-#print("-----------------------")
-#print("TOP SELLING PRODUCTS:")
-#print("  1) Button-Down Shirt: $6,960.35")
-#print("  2) Super Soft Hoodie: $1,875.00")
-#print("  3) etc.")
-
-#print("-----------------------")
 #print("VISUALIZING THE DATA...")
