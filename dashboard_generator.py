@@ -53,8 +53,6 @@ df_group_dict_sort = sorted(df_group_dict.items(), key=lambda x: x[1], reverse=T
 for i in df_group_dict_sort:
 	print(i[0], "${:,.2f}".format(i[1]))
 
-#df_group_dict_sort = df_group_dict.sort_values(['sales price'],ascending=False)
-#df_group_sort_formatted = df_sort.to_string(formatters={'sales price':'${:,.2f}'.format})
 
 #info outputs: visualizing the data
 
