@@ -1,6 +1,6 @@
 # dashboard_generator.py
 
-#input
+#info input
 import os
 import glob
 path = "/Users/Renee/Documents/GitHub/exec-dash-project/monthly-sales"
@@ -21,14 +21,25 @@ if user_choice not in file_name:
 print("-----------------------")
 print("MONTH: ","March 2018") #need to figure out how to pull date and year
 
+print("-----------------------")
+print("CRUNCHING THE DATA...")
+
 csv_file_path = user_choice
 
 import pandas as pd
 df = pd.read_csv(csv_file_path)
-df_dedup = df.groupby(["product"])["sales price"].sum()
-print(df_dedup) #need sorting, need $ format
-print(df["sales price"].sum())
+df_group = df.groupby(['product']).agg({'sales price': "sum"})
+df_sort = df_group.sort_values(['sales price'],ascending=False)
+df_group_sort_formatted = df_sort.to_string(formatters={'sales price':'${:,.2f}'.format})
+print(df_group_sort_formatted)
 
+#info output_total monthly sales
+
+print("-----------------------")
+df_sum_salesprice = df_group['sales price'].sum()
+print("TOTAL MONTHLY SALES: ", "${:,.2f}".format(round(df_sum_salesprice, 2)))
+
+#print("TOTAL MONTHLY SALES: $12,000.71")
 
 #import csv
 
@@ -40,9 +51,6 @@ print(df["sales price"].sum())
         #price_usd_sales = "(${0:.2f})".format(float(row["sales price"]))
         #print(row["product"], price_usd_sales)
 
-
-#print("-----------------------")
-#print("CRUNCHING THE DATA...")
 
 #print("-----------------------")
 #print("TOTAL MONTHLY SALES: $12,000.71")
