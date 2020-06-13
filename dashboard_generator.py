@@ -11,24 +11,35 @@ print(file_name)
 
 user_choice = input("Please choose from the above file list (without ''): ")
 
-import csv
-
-csv_file_path = user_choice
-
-with open(csv_file_path, "r") as csv_file:
-    reader = csv.DictReader(csv_file)
-    for row in reader:
-        print(row["date"], row["product"], row["unit price"], row["units sold"], row["sales price"])
 
 #validate
-
 if user_choice not in file_name:
     print("Hey, didn't find a file at that location")
     exit()
 
+#calculations
+print("-----------------------")
+print("MONTH: ","March 2018") #need to figure out how to pull date and year
 
-#print("-----------------------")
-#print("MONTH: March 2018")
+csv_file_path = user_choice
+
+import pandas as pd
+df = pd.read_csv(csv_file_path)
+df_dedup = df.groupby(["product"])["sales price"].sum()
+print(df_dedup) #need sorting, need $ format
+print(df["sales price"].sum())
+
+
+#import csv
+
+
+#with open(csv_file_path, "r") as csv_file:
+    #reader = csv.DictReader(csv_file)
+    #for row in reader:
+        #price_usd_unit = "(${0:.2f})".format(float(row["unit price"]))
+        #price_usd_sales = "(${0:.2f})".format(float(row["sales price"]))
+        #print(row["product"], price_usd_sales)
+
 
 #print("-----------------------")
 #print("CRUNCHING THE DATA...")
