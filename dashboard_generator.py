@@ -18,9 +18,15 @@ if user_choice not in file_name:
     exit()
 
 #calculations
+
+import datetime
+user_choice_formatted = (user_choice.replace('.csv',''))
+user_choice_formatted_02 = (user_choice_formatted.replace('sales-',''))
+month_year = datetime.datetime.strptime(user_choice_formatted_02, '%Y%m').strftime('%B %Y')
+
+
 print("-----------------------")
-#month_year = 
-print("MONTH: ","March 2018") #need to figure out how to pull date and year
+print("MONTH: ",month_year)
 
 print("-----------------------")
 print("CRUNCHING THE DATA...")
@@ -72,7 +78,7 @@ fig = go.Figure(go.Bar(
             orientation='h'))
 
 fig.update_layout(
-    title="Top-selling Products (month_year)", #need to customize month
+    title="Top-selling Products in " + month_year,
     xaxis_title="Sales(USD)",
     yaxis_title="Product Name")
 
